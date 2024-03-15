@@ -1,0 +1,15 @@
+FROM maven:3.8-openjdk-17 as builder
+
+ONBUILD COPY . /app
+WORKDIR /app
+
+RUN mvn dependency:resolve -f app/pom.xml \
+    && mvn package -f app/pom.xml \
+    && cp app/target/app.jar .
+
+FROM openjdk:17 as runner
+
+ONBUILD COPY --from=builder /app /app
+ONBUILD WORKDIR /app
+
+ONBUILD CMD ["java", "-jar", "app.jar"]

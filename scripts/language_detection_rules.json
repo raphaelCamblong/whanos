@@ -1,0 +1,52 @@
+{
+  "languages": [
+    {
+      "name": "c",
+      "detection": [
+        {
+          "type": "file_existence",
+          "filename": "Makefile"
+        }
+      ]
+    },
+    {
+      "name": "java",
+      "detection": [
+        {
+          "type": "file_existence",
+          "filename": "pom.xml"
+        }
+      ]
+    },
+    {
+      "name": "javascript",
+      "detection": [
+        {
+          "type": "file_existence",
+          "filename": "package.json"
+        }
+      ]
+    },
+    {
+      "name": "python",
+      "detection": [
+        {
+          "type": "file_existence",
+          "filename": "requirements.txt"
+        }
+      ]
+    },
+    {
+      "name": "befunge",
+      "detection": [
+        {
+          "type": "file_existence",
+          "filename": "main.bf"
+        }
+      ]
+    }
+  ],
+  "valid_recursive_directories": [
+    "app"
+  ]
+}

@@ -1,0 +1,33 @@
+jenkins:
+  clouds:
+    - kubernetes:
+        containerCap: 10
+        containerCapStr: "10"
+        jenkinsUrl: "http://10.100.4.164:8080/"
+        name: "localk8s"
+        namespace: "default"
+  systemMessage: "Welcome to the Whanos Jenkins Instance."
+  securityRealm:
+    local:
+      allowsSignup: false
+      enableCaptcha: false
+      users:
+        - id: admin
+          name: "Jenkins Admin"
+          password: ${ADMIN_PASSWORD}
+  authorizationStrategy:
+    loggedInUsersCanDoAnything:
+      allowAnonymousRead: false
+
+credentials:
+  system:
+    domainCredentials:
+      - credentials:
+          - usernamePassword:
+              id: "github-organization-credentials"
+              password: ${GITHUB_TOKEN}
+              scope: GLOBAL
+              username: "github-devops-epitek"
+
+jobs:
+  - file: /var/jenkins_home/resource/jobs/job_dsl.groovy

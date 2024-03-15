@@ -1,0 +1,57 @@
+set dotenv-load := true
+
+# ╭────────────────────────╮
+# │     tests scripts      │
+# ╰────────────────────────╯
+
+run_detection_tests:
+    pytest .
+
+# -- Smart Build --
+test_build_from_context context='apps/js-hello-world' language='javascript' build_number='test-12' resource_images_path='../images':
+    python3 ../scripts/smart_build.py build-from-context \
+      {{context}} \
+      {{language}} \
+      {{build_number}} \
+      {{resource_images_path}}
+
+test_build_from_context_with_base context='apps/ts-hello-world/' language='javascript' build_number='test-1' resource_images_path='../images':
+    python3 ../scripts/smart_build.py build-from-context \
+      {{context}} \
+      {{language}} \
+      {{build_number}} \
+      {{resource_images_path}}
+
+# -- Smart Deploy --
+deploy_name := "typescript-test-deployment"
+
+test_deploy_app:
+    python3 ../scripts/smart_deploy.py deploy-app \
+      ../tests/apps/js-hello-world \
+      {{deploy_name}} \
+      javascript \
+      test-12 \
+      ../helm/app
+    @cat values.yaml
+
+test_deploy_app_with_settings:
+    python3 ../scripts/smart_deploy.py deploy-app \
+      ../tests/apps/ts-hello-world/ \
+      {{deploy_name}} \
+      javascript \
+      test-1 \
+      ../helm/app
+    @cat values.yaml
+
+teardown_deploy_app:
+    rm -rf values.yaml
+    helm uninstall {{deploy_name}}
+
+# -- Whanos tool --
+test_whanos_tools build_number='1':
+    python3 ../scripts/whanos_tool.py \
+    ./apps/js-hello-world \
+    {{build_number}} \
+    ../scripts/language_detection_rules.json \
+    ../images \
+    ../helm/app

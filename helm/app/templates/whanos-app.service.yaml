@@ -1,0 +1,17 @@
+{{- if .Values.deployment.ports }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.name }}
+spec:
+  selector:
+    app: {{ .Values.name }}
+  ports:
+   {{- range .Values.deployment.ports }}
+    - targetPort: {{ . }}
+      protocol: TCP
+      port: {{ . }}
+      name: {{ . | quote }}
+    {{- end }}
+  type: {{ .Values.service.type }}
+{{- end }}

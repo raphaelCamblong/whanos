@@ -1,0 +1,15 @@
+configuration-as-code:latest
+git
+github
+job-dsl
+envinject
+credentials
+workflow-aggregator
+workflow-api
+workflow-cps
+workflow-job
+cloudbees-folder
+kubernetes
+ansicolor
+timestamper
+token-macro

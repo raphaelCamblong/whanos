@@ -1,0 +1,21 @@
+ingress:
+  enable: false
+
+image:
+  repository: velocipastor/whanos-jenkins
+  tag: latest
+  pullPolicy: Always
+
+service:
+  name: whanos-jenkins-service
+  type: LoadBalancer
+  port: 8080
+  containerExposePort: 8080
+
+secret:
+  name: "jenkins-env-secret"
+
+env:
+  secret:
+    GITHUB_TOKEN: ""
+    ADMIN_PASSWORD: ""

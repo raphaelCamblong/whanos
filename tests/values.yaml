@@ -1,0 +1,21 @@
+autoscaling:
+  enabled: false
+  maxReplicas: 100
+  minReplicas: 1
+  targetCPUUtilizationPercentage: 80
+deployment:
+  ports:
+  - 5000
+  replicas: 1
+  resources:
+    limits:
+      memory: 128M
+    requests:
+      memory: 64M
+image:
+  pullPolicy: Always
+  repository: velocipastor/whanos-javascript
+  tag: test-12
+name: typescript-test-deployment
+service:
+  type: LoadBalancer

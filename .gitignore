@@ -1,0 +1,4 @@
+.env
+.idea
+helm/jenkins/values.yaml
+!/helm/jenkins/values.yaml

@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: {{ .Release.Name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+  template:
+    metadata:
+      namespace: {{ .Release.Namespace }}
+      labels:
+        app: {{ .Release.Name }}
+
+    spec:
+      securityContext:
+        fsGroup: 412
+      serviceAccountName: jenkins
+      containers:
+      - name: whanos-jenkins
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        securityContext:
+          privileged: true
+        ports:
+          - containerPort: {{ .Values.service.containerExposePort }}
+        livenessProbe:
+          httpGet:
+            path: "/login"
+            port: 8080
+          initialDelaySeconds: 90
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 5
+        readinessProbe:
+          httpGet:
+            path: "/login"
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        env:
+          {{- include "helpers.list-env-variables" . | indent 10 }}
+        volumeMounts:
+          - name: docker-socket-volume
+            mountPath: /var/run/docker.sock
+          - name: jenkins-docker-cfg
+            mountPath: .docker/
+{{/*          - name: kubectl-binary*/}}
+{{/*            mountPath: /usr/local/bin/*/}}
+{{/*            readOnly: true*/}}
+          - name: kubectl-config
+            mountPath: /root/.kube/config
+            readOnly: true
+
+      restartPolicy: Always
+
+      volumes:
+        - name: docker-socket-volume
+          hostPath:
+            path: /var/run/docker.sock
+        - name: jenkins-docker-cfg
+          secret:
+            secretName: docker-credentials
+            items:
+              - key: .dockerconfigjson
+                path: config.json
+{{/*        - name: kubectl-binary*/}}
+{{/*          hostPath:*/}}
+{{/*            path: /usr/local/bin/kubectl*/}}
+        - name: kubectl-config
+          hostPath:
+            path: /root/.kube/config

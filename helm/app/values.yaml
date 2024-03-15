@@ -1,0 +1,25 @@
+name: "Whanos-example-app-name"
+
+image:
+  repository: "Whanos-example-app-repository"
+  tag: "Whanos-example-app-tag"
+  pullPolicy: Always
+
+service:
+  type: LoadBalancer
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+deployment:
+  replicas: 1
+  resources:
+    limits:
+      memory: "128M"
+    requests:
+      memory: "64M"
+  ports:
+    - 5000
