@@ -2,6 +2,8 @@
 
 Welcome to the Whanos project! This project aims to create a DevOps solution to run build and deploy by just adding your git repository URL.
 
+![Diagram](./images/diagram.png)
+
 # Table of Contents
 
 - [Technologies](#technologies)
